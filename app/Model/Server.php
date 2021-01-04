@@ -1346,7 +1346,7 @@ class Server extends AppModel
                     'auth_enforced' => [
                         'level' => self::SETTING_OPTIONAL,
                         'description' => __('This optional can be enabled if external auth provider is used and when set to true, it will disable default form authentication.'),
-                        'value' => false,
+                        'value' => true,
                         'errorMessage' => '',
                         'test' => 'testBool',
                         'type' => 'boolean',
