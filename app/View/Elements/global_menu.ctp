@@ -512,3 +512,27 @@
 </div>
 <input type="hidden" class="keyboardShortcutsConfig" value="/shortcuts/global_menu.json" />
 
+<div  class="classifbanner">Dynamic Page - Highest Possible Classification is UNCLASSIFIED//FOUO</div>
+<div id="topBar" class="navbar navbar-inverse <?php echo $debugMode;?>" style="z-index: 20;">
+  <div class="navbar-inner">
+    <ul class="nav">
+        <?php
+            if (!empty($menu)) {
+                foreach ($menu as $root_element) {
+                    echo $this->element('/genericElements/GlobalMenu/global_menu_root', array('data' => $root_element));
+                }
+            }
+        ?>
+    </ul>
+    <ul class="nav pull-right">
+        <?php
+            if (!empty($menu_right)) {
+                foreach ($menu_right as $root_element) {
+                    echo $this->element('/genericElements/GlobalMenu/global_menu_root', array('data' => $root_element));
+                }
+            }
+        ?>
+    </ul>
+  </div>
+</div>
+<input type="hidden" class="keyboardShortcutsConfig" value="/shortcuts/global_menu.json" />

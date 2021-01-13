@@ -404,6 +404,18 @@ a:focus {
   clear: both;
 }
 
+.classifbanner {
+  width: 100%;
+  background: green;
+  font-weight: bold;
+  color: black;
+  text-align: center;
+  z-index: 9999;
+  left: 0;
+  top: 0;
+  position: fixed;
+}
+
 .row-fluid [class*="span"] {
   display: block;
   float: left;
