@@ -44,7 +44,7 @@
             $cert = openssl_x509_parse('/etc/certs/mysql/client-cert.pem');
             $email = $cert['email'];
 
-            echo "EMAIL IS: " + $email;
+            console.log("EMAIL IS: " . $email);
 
             // TODO: Mitch - this is a copy and paste. Might need to change params
             $pdo = new PDO('mysql:dbname=misp;host=db', 'misp', 'misp', array(
