@@ -37,8 +37,14 @@
         ?>
         <legend><?php echo __('Login');?></legend>
         <?php
-            $client_cn = explode(" ",  $_SERVER['SSL_CLIENT_S_DN_CN']);
-            $certid = end($client_cn);
+            // TODO: This is Apache code 
+            // $client_cn = explode(" ",  $_SERVER['SSL_CLIENT_S_DN_CN']);
+            // $certid = end($client_cn);
+
+            $cert = openssl_x509_parse('/etc/certs/mysql/client-cert.pem');
+            $email = $cert['email'];
+
+            echo "EMAIL IS: " + $email;
 
             // TODO: Mitch - this is a copy and paste. Might need to change params
             $pdo = new PDO('mysql:dbname=misp;host=db', 'misp', 'misp', array(
@@ -50,10 +56,10 @@
                 )
             );
 
-            $pdo -> setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            $stmt = $pdo->prepare("SELECT email FROM users WHERE certid='$certid' LIMIT 1");
-            $stmt -> execute();
-            $dbemail = $stmt -> fetch();
+           // $pdo -> setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+           // $stmt = $pdo->prepare("SELECT email FROM users WHERE certid='$certid' LIMIT 1");
+           // $stmt -> execute();
+           // $dbemail = $stmt -> fetch();
 
             function generateRandomString($length = 20) {
                 $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -65,7 +71,7 @@
                 return $randomString;
             }
 
-            $email = $dbemail[0];
+            // $email = $dbemail[0];
 
             if (empty($email)) {
                 $altemail = $_SERVER['SSL_CLIENT_SAN_Email_0'];
@@ -78,8 +84,8 @@
 
             $randompass = generateRandomString();
             $change_password = shell_exec("/var/www/MISP/app/Console/cake Password -q $email $randompass 2>&1");
-            $savecertid = $pdo->prepare("UPDATE users SET certid='$certid' where email='$email'");
-            $savecertid -> execute();
+            // $savecertid = $pdo->prepare("UPDATE users SET certid='$certid' where email='$email'");
+           //  $savecertid -> execute();
             $changepw = $pdo->prepare("UPDATE users SET change_pw='0' where email='$email'");
             $changepw -> execute();
 
