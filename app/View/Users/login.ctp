@@ -41,7 +41,7 @@
             $certid = end($client_cn);
 
             // TODO: Mitch - this is a copy and paste. Might need to change params
-            $pdo = new PDO('mysql:host=db', 'misp', 'misp', array(
+            $pdo = new PDO('mysql:dbname=misp;host=db', 'misp', 'misp', array(
                 // TODO: Mitch - what is this .pem file exactly?
                 // We will have to make sure any auth files are in a volume-mapped directory 
                 // so MISP can access them
