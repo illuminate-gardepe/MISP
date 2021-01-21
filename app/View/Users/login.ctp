@@ -45,7 +45,7 @@
                 // TODO: Mitch - what is this .pem file exactly?
                 // We will have to make sure any auth files are in a volume-mapped directory 
                 // so MISP can access them
-                PDO::MYSQL_ATTR_SSL_CA => '/etc/mysql/certs/client-cert.pem',
+                PDO::MYSQL_ATTR_SSL_CA => '/etc/certs/mysql/client-cert.pem',
                 PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT => false
                 )
             );

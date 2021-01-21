@@ -166,7 +166,7 @@ class MysqlExtendedLogging extends DboSource {
 			PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true,
 			PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
 			PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT => false,
-			PDO::MYSQL_ATTR_SSL_CA => "/etc/mysql/certs/client-cert.pem"
+			PDO::MYSQL_ATTR_SSL_CA => "/etc/certs/mysql/client-cert.pem"
 		);
 
 		if (!empty($config['encoding'])) {
