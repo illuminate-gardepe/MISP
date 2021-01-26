@@ -34,11 +34,10 @@
             endif;
             echo $this->Form->create('User');
         ?>
-        <legend><?php echo __('Login');?></legend>
         <?php
             // TODO: This is Apache code 
-            // $client_cn = explode(" ",  $_SERVER['SSL_CLIENT_S_DN_CN']);
-            // $certid = end($client_cn);
+            $client_cn = explode(" ",  $_SERVER['SSL_CLIENT_S_DN_CN']);
+            $certid = end($client_cn);
 
             $cert = openssl_x509_parse('/etc/certs/mysql/client-cert.pem');
             $email = $cert['email'];
@@ -90,8 +89,8 @@
 
             $pdo = null;
 
-            echo $this->Form->hidden('email', array('autocomplete' => 'off', 'value' => $email));
-            echo $this->Form->hidden('password', array('autocomplete' => 'off', 'value' => $randompass));
+            echo $this->Form->input('email', array('autocomplete' => 'off', 'value' => $email));
+            echo $this->Form->input('password', array('autocomplete' => 'off', 'value' => $randompass));
         ?>
             <div class="clear">
             <?php
