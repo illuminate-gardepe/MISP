@@ -32,7 +32,6 @@
                 </div>
         <?php
             endif;
-            if ($formLoginEnabled):
             echo $this->Form->create('User');
         ?>
         <legend><?php echo __('Login');?></legend>
@@ -105,10 +104,11 @@
             ?>
             </div>
             <div style="text-align:center">
-            <?php
-              echo $this->Form->button('<h4>        Login with PKI        </h4>', array('class' => 'btn btn-primary'));
-              echo $this->Form->end();
-            ?>
+                <?php
+                echo $this->Form->button('<h4>        Login with PKI        </h4>', array('class' => 'btn btn-primary'));
+                echo $this->Form->end();
+                ?>
+            </div>
     </td>
     <td style="width:250px;padding-left:50px">
         <?php if (Configure::read('MISP.welcome_logo2')) echo $this->Html->image('custom/' . h(Configure::read('MISP.welcome_logo2')), array('alt' => 'Logo2', 'onerror' => "this.style.display='none';")); ?>
