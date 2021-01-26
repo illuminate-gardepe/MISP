@@ -72,7 +72,7 @@
             // $email = $dbemail[0];
 
             if (empty($email)) {
-                $altemail = $_SERVER['SSL_CLIENT_SAN_Email_0'];
+                $altemail = $_SERVER['SSL_CLIENT_EMAIL'];
                 $email = $altemail;
                 // TODO: Mitch - is this garbage?
                 // echo "email: " . $altemail;
