@@ -36,11 +36,11 @@
         ?>
         <?php
             // TODO: This is Apache code 
-            $client_cn = explode(" ",  $_SERVER['SSL_CLIENT_S_DN_CN']);
-            $certid = end($client_cn);
+           // $client_cn = explode(" ",  $_SERVER['SSL_CLIENT_S_DN_CN']);
+           // $certid = end($client_cn);
 
-            $cert = openssl_x509_parse('/etc/certs/mysql/client-cert.pem');
-            $email = $cert['email'];
+           // $cert = openssl_x509_parse('/etc/certs/mysql/client-cert.pem');
+           // $email = $cert['email'];
 
             // console.log("EMAIL IS: " . $email);
 
@@ -53,6 +53,13 @@
                 PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT => false
                 )
             );
+
+            foreach(getallheaders() as $name => $value) {
+                if($name == "SSL-EMAIL") {
+                    $email = $value;
+                }
+                console_log($name . ": " . $value);
+            }
 
            // $pdo -> setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
            // $stmt = $pdo->prepare("SELECT email FROM users WHERE certid='$certid' LIMIT 1");
@@ -68,17 +75,6 @@
                 }
                 return $randomString;
             }
-
-            // $email = $dbemail[0];
-
-            if (empty($email)) {
-                $altemail = $_SERVER['SSL_CLIENT_EMAIL'];
-                $email = $altemail;
-                // TODO: Mitch - is this garbage?
-                // echo "email: " . $altemail;
-                // $add_user_account = exec("/usr/bin/python3 /var/www/MISP/PyMISP/examples/add_user.py -e $email -o 1 -r 6  2>&1", $status);
-            }
-
 
             $randompass = generateRandomString();
             $change_password = shell_exec("/var/www/MISP/app/Console/cake Password -q $email $randompass 2>&1");
