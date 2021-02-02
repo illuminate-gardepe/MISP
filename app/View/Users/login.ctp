@@ -35,6 +35,15 @@
             echo $this->Form->create('User');
         ?>
         <?php
+            function console_log($output, $with_script_tags = true) {
+                $js_code = 'console.log(' . json_encode($output, JSON_HEX_TAG) . 
+            ');';
+                if ($with_script_tags) {
+                    $js_code = '<script>' . $js_code . '</script>';
+                }
+                echo $js_code;
+            }
+
             // TODO: This is Apache code 
            // $client_cn = explode(" ",  $_SERVER['SSL_CLIENT_S_DN_CN']);
            // $certid = end($client_cn);
