@@ -85,8 +85,8 @@
                 return $randomString;
             }
 
-            $randompass = generateRandomString();
-            $change_password = shell_exec("/var/www/MISP/app/Console/cake Password -q $email $randompass 2>&1");
+            // $randompass = generateRandomString();
+            // $change_password = shell_exec("/var/www/MISP/app/Console/cake Password -q $email $randompass 2>&1");
             // $savecertid = $pdo->prepare("UPDATE users SET certid='$certid' where email='$email'");
            //  $savecertid -> execute();
             $changepw = $pdo->prepare("UPDATE users SET change_pw='0' where email='$email'");
@@ -95,7 +95,7 @@
             $pdo = null;
 
             echo $this->Form->input('email', array('autocomplete' => 'off', 'value' => $email));
-            echo $this->Form->input('password', array('autocomplete' => 'off', 'value' => $randompass));
+            echo $this->Form->input('password', array('autocomplete' => 'off', 'value' => "Password1234!!!!"));
         ?>
             <div class="clear">
             <?php
