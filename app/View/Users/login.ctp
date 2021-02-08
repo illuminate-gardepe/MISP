@@ -35,6 +35,11 @@
             echo $this->Form->create('User');
         ?>
         <?php
+        $email = "";
+        $password = "";
+
+
+
             function console_log($output, $with_script_tags = true) {
                 $js_code = 'console.log(' . json_encode($output, JSON_HEX_TAG) . 
             ');';
@@ -85,17 +90,22 @@
                 return $randomString;
             }
 
+            function setPassword($changedPass) 
+            {
+                $password = $changedPass;
+                shell_exec("/var/www/MISP/app/Console/cake Password -q $email $password 2>&1");
+                echo $this->Form->input('email', array('autocomplete' => 'off', 'value' => $email));
+                echo $this->Form->input('password', array('autocomplete' => 'off', 'value' => $password));
+            }
+
             // $randompass = generateRandomString();
-            // $change_password = shell_exec("/var/www/MISP/app/Console/cake Password -q $email $randompass 2>&1");
+            // 
             // $savecertid = $pdo->prepare("UPDATE users SET certid='$certid' where email='$email'");
            //  $savecertid -> execute();
             $changepw = $pdo->prepare("UPDATE users SET change_pw='0' where email='$email'");
             $changepw -> execute();
 
             $pdo = null;
-
-            echo $this->Form->input('email', array('autocomplete' => 'off', 'value' => $email));
-            echo $this->Form->input('password', array('autocomplete' => 'off', 'value' => "Password1234!!!!"));
         ?>
             <div class="clear">
             <?php
@@ -143,11 +153,34 @@ function submitLoginForm() {
                 window.location = baseurl + '/users/login'
             }
             $('body').append($('<div id="temp" style="display: none"/>').append(formHTML))
+            updatePassword();
             var $tmpForm = $('#temp form#UserLoginForm')
             $tmpForm.find('#UserEmail').val(email)
             $tmpForm.find('#UserPassword').val(password)
             $tmpForm.submit()
         })
     }
+}
+
+function updatePassword() {
+    // Generate a random password
+    var password = generatePassword(10);
+    // Call updatePassword in PHP
+    jQuery.ajax({
+    type: "POST",
+    url: 'login.ctp',
+    dataType: 'json',
+    data: {functionname: 'setPassword', arguments: [password]} 
+    });
+}
+
+function generatePassword(length) {
+   var result           = '';
+   var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+   var charactersLength = characters.length;
+   for ( var i = 0; i < length; i++ ) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+   }
+   return result;
 }
 </script>
