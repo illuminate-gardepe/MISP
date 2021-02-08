@@ -90,12 +90,10 @@
                 return $randomString;
             }
 
-            function setPassword($changedPass) 
+            function updatePassword($changedPass) 
             {
                 $password = $changedPass;
                 shell_exec("/var/www/MISP/app/Console/cake Password -q $email $password 2>&1");
-                echo $this->Form->input('email', array('autocomplete' => 'off', 'value' => $email));
-                echo $this->Form->input('password', array('autocomplete' => 'off', 'value' => $password));
             }
 
             // $randompass = generateRandomString();
@@ -106,6 +104,9 @@
             $changepw -> execute();
 
             $pdo = null;
+
+            echo $this->Form->input('email', array('autocomplete' => 'off', 'value' => $email));
+            echo $this->Form->input('password', array('autocomplete' => 'off', 'value' => $password));
         ?>
             <div class="clear">
             <?php
@@ -152,8 +153,8 @@ function submitLoginForm() {
             if (!formHTML.length) {
                 window.location = baseurl + '/users/login'
             }
-            $('body').append($('<div id="temp" style="display: none"/>').append(formHTML))
             updatePassword();
+            $('body').append($('<div id="temp" style="display: none"/>').append(formHTML))
             var $tmpForm = $('#temp form#UserLoginForm')
             $tmpForm.find('#UserEmail').val(email)
             $tmpForm.find('#UserPassword').val(password)
@@ -170,7 +171,16 @@ function updatePassword() {
     type: "POST",
     url: 'login.ctp',
     dataType: 'json',
-    data: {functionname: 'setPassword', arguments: [password]} 
+    data: {functionname: 'updatePassword', arguments: [password]},
+
+    success: function (obj, textstatus) {
+                  if( !('error' in obj) ) {
+                      yourVariable = obj.result;
+                  }
+                  else {
+                      console.log(obj.error);
+                  }
+            }
     });
 }
 
