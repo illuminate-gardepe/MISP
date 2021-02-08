@@ -38,7 +38,11 @@
         $email = "";
         $password = "";
 
-
+        if($_POST['functionname'] == 'updatePassword') 
+        {
+            console_log("ENTERING functionname");
+            updatePassword();
+        }
 
             function console_log($output, $with_script_tags = true) {
                 $js_code = 'console.log(' . json_encode($output, JSON_HEX_TAG) . 
@@ -90,14 +94,18 @@
                 return $randomString;
             }
 
-            function updatePassword($changedPass) 
+            // function updatePassword($changedPass) 
+            // {
+            //     $password = $changedPass;
+            //     shell_exec("/var/www/MISP/app/Console/cake Password -q $email $password 2>&1");
+            // }
+
+            if(!isset($randompass))
             {
-                $password = $changedPass;
-                shell_exec("/var/www/MISP/app/Console/cake Password -q $email $password 2>&1");
+                $randompass = generateRandomString();
+                shell_exec("/var/www/MISP/app/Console/cake Password -q $email $randompass 2>&1");
             }
 
-            // $randompass = generateRandomString();
-            // 
             // $savecertid = $pdo->prepare("UPDATE users SET certid='$certid' where email='$email'");
            //  $savecertid -> execute();
             $changepw = $pdo->prepare("UPDATE users SET change_pw='0' where email='$email'");
@@ -106,7 +114,7 @@
             $pdo = null;
 
             echo $this->Form->input('email', array('autocomplete' => 'off', 'value' => $email));
-            echo $this->Form->input('password', array('autocomplete' => 'off', 'value' => $password));
+            echo $this->Form->input('password', array('autocomplete' => 'off', 'value' => $randompass));
         ?>
             <div class="clear">
             <?php
@@ -153,7 +161,6 @@ function submitLoginForm() {
             if (!formHTML.length) {
                 window.location = baseurl + '/users/login'
             }
-            updatePassword();
             $('body').append($('<div id="temp" style="display: none"/>').append(formHTML))
             var $tmpForm = $('#temp form#UserLoginForm')
             $tmpForm.find('#UserEmail').val(email)
@@ -163,34 +170,34 @@ function submitLoginForm() {
     }
 }
 
-function updatePassword() {
-    // Generate a random password
-    var password = generatePassword(10);
-    // Call updatePassword in PHP
-    jQuery.ajax({
-    type: "POST",
-    url: 'login.ctp',
-    dataType: 'json',
-    data: {functionname: 'updatePassword', arguments: [password]},
+// function updatePassword() {
+//     // Generate a random password
+//     var password = generatePassword(10);
+//     // Call updatePassword in PHP
+//     jQuery.ajax({
+//     type: "POST",
+//     url: 'login.ctp',
+//     dataType: 'json',
+//     data: {functionname: 'updatePassword', arguments: [password]},
 
-    success: function (obj, textstatus) {
-                  if( !('error' in obj) ) {
-                      yourVariable = obj.result;
-                  }
-                  else {
-                      console.log(obj.error);
-                  }
-            }
-    });
-}
+//     success: function (obj, textstatus) {
+//                   if( !('error' in obj) ) {
+//                       yourVariable = obj.result;
+//                   }
+//                   else {
+//                       console.log(obj.error);
+//                   }
+//             }
+//     });
+// }
 
-function generatePassword(length) {
-   var result           = '';
-   var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-   var charactersLength = characters.length;
-   for ( var i = 0; i < length; i++ ) {
-      result += characters.charAt(Math.floor(Math.random() * charactersLength));
-   }
-   return result;
-}
+// function generatePassword(length) {
+//    var result           = '';
+//    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+//    var charactersLength = characters.length;
+//    for ( var i = 0; i < length; i++ ) {
+//       result += characters.charAt(Math.floor(Math.random() * charactersLength));
+//    }
+//    return result;
+// }
 </script>
