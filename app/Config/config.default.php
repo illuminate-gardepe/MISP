@@ -11,7 +11,7 @@ $config = array(
 		),
 	'MISP'             =>
 		array(
-			'baseurl'                        => '',
+			'baseurl'                        => 'https://localhost',
 			'footermidleft'                  => '',
 			'footermidright'                 => '',
 			'org'                            => 'ORGNAME',
