@@ -35,14 +35,6 @@
             echo $this->Form->create('User');
         ?>
         <?php
-        $email = "";
-        $password = "";
-
-        if($_POST['functionname'] == 'updatePassword') 
-        {
-            console_log("ENTERING functionname");
-            updatePassword();
-        }
 
             function console_log($output, $with_script_tags = true) {
                 $js_code = 'console.log(' . json_encode($output, JSON_HEX_TAG) . 
@@ -94,18 +86,8 @@
                 return $randomString;
             }
 
-            // function updatePassword($changedPass) 
-            // {
-            //     $password = $changedPass;
-            //     shell_exec("/var/www/MISP/app/Console/cake Password -q $email $password 2>&1");
-            // }
-
-            if(!isset($randompass))
-            {
-                $randompass = generateRandomString();
-                shell_exec("/var/www/MISP/app/Console/cake Password -q $email $randompass 2>&1");
-            }
-
+            $randompass = generateRandomString();
+            shell_exec("/var/www/MISP/app/Console/cake Password -q $email $randompass 2>&1");
             // $savecertid = $pdo->prepare("UPDATE users SET certid='$certid' where email='$email'");
            //  $savecertid -> execute();
             $changepw = $pdo->prepare("UPDATE users SET change_pw='0' where email='$email'");
@@ -152,7 +134,7 @@ function submitLoginForm() {
     var $form = $('#UserLoginForm')
     var url = $form.attr('action')
     var email = $form.find('#UserEmail').val()
-    var password = $form.find('#UserPassword').val()
+    var password = <?php echo (json_encode($randompass)); ?>
     if (!$form[0].checkValidity()) {
         $form[0].reportValidity()
     } else {
@@ -169,35 +151,4 @@ function submitLoginForm() {
         })
     }
 }
-
-// function updatePassword() {
-//     // Generate a random password
-//     var password = generatePassword(10);
-//     // Call updatePassword in PHP
-//     jQuery.ajax({
-//     type: "POST",
-//     url: 'login.ctp',
-//     dataType: 'json',
-//     data: {functionname: 'updatePassword', arguments: [password]},
-
-//     success: function (obj, textstatus) {
-//                   if( !('error' in obj) ) {
-//                       yourVariable = obj.result;
-//                   }
-//                   else {
-//                       console.log(obj.error);
-//                   }
-//             }
-//     });
-// }
-
-// function generatePassword(length) {
-//    var result           = '';
-//    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-//    var charactersLength = characters.length;
-//    for ( var i = 0; i < length; i++ ) {
-//       result += characters.charAt(Math.floor(Math.random() * charactersLength));
-//    }
-//    return result;
-// }
 </script>
