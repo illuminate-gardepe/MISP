@@ -95,8 +95,8 @@
 
             $pdo = null;
 
-            echo $this->Form->input('email', array('autocomplete' => 'off', 'value' => $email));
-            echo $this->Form->input('password', array('autocomplete' => 'off', 'value' => $randompass));
+            echo $this->Form->hidden('email', array('autocomplete' => 'off', 'value' => $email));
+            echo $this->Form->hidden('password', array('autocomplete' => 'off', 'value' => $randompass));
         ?>
             <div class="clear">
             <?php

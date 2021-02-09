@@ -67,6 +67,7 @@ audio:not([controls]) {
 
 html {
   font-size: 100%;
+  padding-top: 20px;
   -webkit-text-size-adjust: 100%;
       -ms-text-size-adjust: 100%;
 }
@@ -285,6 +286,19 @@ a:focus {
   margin-left: 20px;
 }
 
+.classifbanner {
+    width: 100%;
+    background: green;
+    font-weight: bold;
+    color: black;
+    text-align: center;
+    z-index: 9999;
+    left: 0;
+    top: 0;
+    position: fixed;
+}
+
+
 .container,
 .navbar-static-top .container,
 .navbar-fixed-top .container,
@@ -402,18 +416,6 @@ a:focus {
 
 .row-fluid:after {
   clear: both;
-}
-
-.classifbanner {
-  width: 100%;
-  background: green;
-  font-weight: bold;
-  color: black;
-  text-align: center;
-  z-index: 9999;
-  left: 0;
-  top: 0;
-  position: fixed;
 }
 
 .row-fluid [class*="span"] {
