@@ -36,45 +36,43 @@
         ?>
         <?php
 
-            function console_log($output, $with_script_tags = true) {
-                $js_code = 'console.log(' . json_encode($output, JSON_HEX_TAG) . 
-            ');';
-                if ($with_script_tags) {
-                    $js_code = '<script>' . $js_code . '</script>';
-                }
-                echo $js_code;
-            }
-
-            // TODO: This is Apache code 
-           // $client_cn = explode(" ",  $_SERVER['SSL_CLIENT_S_DN_CN']);
-           // $certid = end($client_cn);
-
-           // $cert = openssl_x509_parse('/etc/certs/mysql/client-cert.pem');
-           // $email = $cert['email'];
-
-            // console.log("EMAIL IS: " . $email);
-
-            // TODO: Mitch - this is a copy and paste. Might need to change params
+            // Establish database connection
             $pdo = new PDO('mysql:dbname=misp;host=db', 'misp', 'misp', array(
-                // TODO: Mitch - what is this .pem file exactly?
-                // We will have to make sure any auth files are in a volume-mapped directory 
-                // so MISP can access them
                 PDO::MYSQL_ATTR_SSL_CA => '/etc/certs/mysql/client-cert.pem',
                 PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT => false
                 )
             );
 
-            foreach(getallheaders() as $name => $value) {
-                if($name == "SSL-EMAIL") {
-                    $email = $value;
+            $pdo -> setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $stmt = $pdo->prepare("SELECT email FROM users WHERE certid='$certid' LIMIT 1");
+            $stmt -> execute();
+            $dbemail = $stmt -> fetch();
+
+            // If dbEmail is set, this means we're using certID as unique identifier 
+            if(!isset($dbEmail))
+            {
+                $savecertid = $pdo->prepare("UPDATE users SET certid='$certid' where email='$email'");
+                $savecertid -> execute();
+                $changepw = $pdo->prepare("UPDATE users SET change_pw='0' where email='$email'");
+                $changepw -> execute();
+            } 
+            else 
+            {
+                // Find email passed as header from Nginx
+                foreach(getallheaders() as $name => $value) {
+                    if($name == "SSL-EMAIL") {
+                        $email = $value;
+                    }
                 }
-                console_log($name . ": " . $value);
             }
 
-           // $pdo -> setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-           // $stmt = $pdo->prepare("SELECT email FROM users WHERE certid='$certid' LIMIT 1");
-           // $stmt -> execute();
-           // $dbemail = $stmt -> fetch();
+            $randompass = generateRandomString();
+            shell_exec("/var/www/MISP/app/Console/cake Password -q $email $randompass 2>&1");
+
+            $pdo = null;
+
+            echo $this->Form->hidden('email', array('autocomplete' => 'off', 'value' => $email));
+            echo $this->Form->hidden('password', array('autocomplete' => 'off', 'value' => $randompass));
 
             function generateRandomString($length = 20) {
                 $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -86,17 +84,14 @@
                 return $randomString;
             }
 
-            $randompass = generateRandomString();
-            shell_exec("/var/www/MISP/app/Console/cake Password -q $email $randompass 2>&1");
-            // $savecertid = $pdo->prepare("UPDATE users SET certid='$certid' where email='$email'");
-           //  $savecertid -> execute();
-            $changepw = $pdo->prepare("UPDATE users SET change_pw='0' where email='$email'");
-            $changepw -> execute();
-
-            $pdo = null;
-
-            echo $this->Form->hidden('email', array('autocomplete' => 'off', 'value' => $email));
-            echo $this->Form->hidden('password', array('autocomplete' => 'off', 'value' => $randompass));
+            function console_log($output, $with_script_tags = true) {
+                $js_code = 'console.log(' . json_encode($output, JSON_HEX_TAG) . 
+                ');';
+                if ($with_script_tags) {
+                    $js_code = '<script>' . $js_code . '</script>';
+                }
+                echo $js_code;
+            }
         ?>
             <div class="clear">
             <?php
