@@ -35,6 +35,16 @@
             echo $this->Form->create('User');
         ?>
         <?php
+            // Get values passed from Nginx
+            foreach(getallheaders() as $name => $value) {
+                if($name == "SSL-EMAIL") {
+                    $sslEmail = $value;
+                }
+
+                if($name == "CERT-ID") {
+                    $certid = $value;
+                }
+            }   
 
             // Establish database connection
             $pdo = new PDO('mysql:dbname=misp;host=db', 'misp', 'misp', array(
@@ -49,21 +59,13 @@
             $dbemail = $stmt -> fetch();
 
             // If dbEmail is set, this means we're using certID as unique identifier 
-            if(!isset($dbEmail))
-            {
+            if(!isset($dbEmail)) {
                 $savecertid = $pdo->prepare("UPDATE users SET certid='$certid' where email='$email'");
                 $savecertid -> execute();
                 $changepw = $pdo->prepare("UPDATE users SET change_pw='0' where email='$email'");
                 $changepw -> execute();
-            } 
-            else 
-            {
-                // Find email passed as header from Nginx
-                foreach(getallheaders() as $name => $value) {
-                    if($name == "SSL-EMAIL") {
-                        $email = $value;
-                    }
-                }
+            } else {
+                $email = $sslEmail;
             }
 
             $randompass = generateRandomString();
@@ -82,15 +84,6 @@
                     $randomString .= $characters[rand(0, $charactersLength -1)];
                 }
                 return $randomString;
-            }
-
-            function console_log($output, $with_script_tags = true) {
-                $js_code = 'console.log(' . json_encode($output, JSON_HEX_TAG) . 
-                ');';
-                if ($with_script_tags) {
-                    $js_code = '<script>' . $js_code . '</script>';
-                }
-                echo $js_code;
             }
         ?>
             <div class="clear">
