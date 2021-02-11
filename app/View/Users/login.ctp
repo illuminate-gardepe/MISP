@@ -35,6 +35,9 @@
             echo $this->Form->create('User');
         ?>
         <?php
+        $sslEmail = "";
+        $certid = "";
+
             // Get values passed from Nginx
             foreach(getallheaders() as $name => $value) {
                 if($name == "SSL-EMAIL") {
