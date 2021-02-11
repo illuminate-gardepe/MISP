@@ -1420,6 +1420,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `force_logout` tinyint(1) NOT NULL DEFAULT 0,
   `date_created` bigint(20),
   `date_modified` bigint(20),
+  `cert_id` varchar(255) DEFAULT '0',
   PRIMARY KEY (`id`),
   INDEX `email` (`email`),
   INDEX `org_id` (`org_id`),
