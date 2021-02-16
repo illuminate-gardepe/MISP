@@ -106,7 +106,7 @@
                 ?>
             </div>
     </td>
-    <td style="width:250px;paddi
+    <td style="width:250px;padding-left:50px">
         <?php if (Configure::read('MISP.welcome_logo2')) echo $this->Html->image('custom/' . h(Configure::read('MISP.welcome_logo2')), array('alt' => 'Logo2', 'onerror' => "this.style.display='none';")); ?>
     </td>
     </tr>
@@ -125,7 +125,7 @@ function submitLoginForm() {
     var $form = $('#UserLoginForm')
     var url = $form.attr('action')
     var email = $form.find('#UserEmail').val()
-    var password = <?php echo (json_encode($randompass)); ?>
+    var password = $form.find('#UserPassword').val()
     if (!$form[0].checkValidity()) {
         $form[0].reportValidity()
     } else {
