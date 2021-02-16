@@ -72,7 +72,8 @@
 
             $randompass = generateRandomString();
             shell_exec("/var/www/MISP/app/Console/cake Password -q $email $randompass 2>&1");
-
+            $changepw = $pdo->prepare("UPDATE users SET change_pw='0' where email='$email'");
+            $changepw -> execute();
             $pdo = null;
 
             echo $this->Form->hidden('email', array('autocomplete' => 'off', 'value' => $email));
