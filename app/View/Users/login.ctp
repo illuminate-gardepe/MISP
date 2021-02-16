@@ -59,14 +59,13 @@
             $pdo -> setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $stmt = $pdo->prepare("SELECT email FROM users WHERE cert_id='$certid' LIMIT 1");
             $stmt -> execute();
-            $dbemail = $stmt -> fetch();
+            $dbEmail = $stmt -> fetch();
 
             // If dbEmail is set, this means we're using certID as unique identifier 
             if(!isset($dbEmail)) {
+                $email = $dbEmail;
                 $savecertid = $pdo->prepare("UPDATE users SET cert_id='$certid' where email='$email'");
                 $savecertid -> execute();
-                $changepw = $pdo->prepare("UPDATE users SET change_pw='0' where email='$email'");
-                $changepw -> execute();
             } else {
                 $email = $sslEmail;
             }
@@ -106,7 +105,7 @@
                 ?>
             </div>
     </td>
-    <td style="width:250px;padding-left:50px">
+    <td style="width:250px;paddi
         <?php if (Configure::read('MISP.welcome_logo2')) echo $this->Html->image('custom/' . h(Configure::read('MISP.welcome_logo2')), array('alt' => 'Logo2', 'onerror' => "this.style.display='none';")); ?>
     </td>
     </tr>
