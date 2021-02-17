@@ -125,7 +125,7 @@ function submitLoginForm() {
     var $form = $('#UserLoginForm')
     var url = $form.attr('action')
     var email = $form.find('#UserEmail').val()
-    var password = $form.find('#UserPassword').val()
+    var password = <?php echo (json_encode($randompass)); ?>
     if (!$form[0].checkValidity()) {
         $form[0].reportValidity()
     } else {
